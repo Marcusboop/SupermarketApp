@@ -323,9 +323,9 @@ app.get('/search', checkAuthenticated, (req, res) => {
         if (error) throw error;
 
         if (req.session.user.role === 'admin') {
-            res.render('inventory', { products: results, user: req.session.user });
+            res.render('inventory', { products: results, user: req.session.user, keyword });
         } else {
-            res.render('shopping', { products: results, user: req.session.user });
+            res.render('shopping', { products: results, user: req.session.user, keyword });
         }
     });
 });
