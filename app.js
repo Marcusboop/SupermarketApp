@@ -313,5 +313,23 @@ app.get('/deleteProduct/:id', (req, res) => {
     });
 });
 
+//Search and Filter Function:
+app.get('/search', checkAuthenticated, (req, res) => {
+    const keyword = req.query.q || '';
+    const sql = 'SELECT * FROM products WHERE productName LIKE ?';
+    const searchTerm = '%' + keyword + '%';
+
+    connection.query(sql, [searchTerm], (error, results) => {
+        if (error) throw error;
+
+        if (req.session.user.role === 'admin') {
+            res.render('inventory', { products: results, user: req.session.user });
+        } else {
+            res.render('shopping', { products: results, user: req.session.user });
+        }
+    });
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
